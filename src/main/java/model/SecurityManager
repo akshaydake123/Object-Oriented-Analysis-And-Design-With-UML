@@ -1,1 +1,219 @@
 
+package model;
+ 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import pojo.UserV1;
+import pojo.UserVO;
+ 
+import dao.DbConnection;
+
+import dao.LoginHandler;
+ 
+public class SecurityManager {
+ 
+public ArrayList<UserVO> getAllUsersList()throws Exception {
+ArrayList<UserVO> userList = null;
+try {
+DbConnection database= new DbConnection();
+Connection connection = database.getConnection();
+LoginHandler loginHandler= new LoginHandler();
+userList= loginHandler.getAllUsers(connection);
+
+} catch (Exception e) {
+throw e;
+}
+return userList;
+}
+
+
+public  String checkUserNameValidity(String useremail) throws Exception{
+	//ArrayList<UserV1> userList = null;
+	String userList="";
+	try {
+		DbConnection database= new DbConnection();
+		Connection connection = database.getConnection();
+		LoginHandler loginHandler= new LoginHandler();
+		userList=loginHandler.checkUserNameValidity(connection,useremail);
+		return userList;
+		} catch (Exception e) {
+		throw e;
+		}
+}
+
+public boolean addUser(String username,String mobnumber,String emailid,String password) throws Exception{
+	try {
+		DbConnection database= new DbConnection();
+		Connection connection = database.getConnection();
+		LoginHandler loginHandler= new LoginHandler();
+		int rows=loginHandler.addUser(connection,username,mobnumber,emailid,password);
+			if(rows==0)
+				return false;
+			else
+				return true;
+		} catch (Exception e) {
+		throw e;
+		}
+}
+ 
+//Upload Code	
+public String uploadFile(String filepath,String fileName,String und) throws Exception{
+	DbConnection database= new DbConnection();
+	Connection conn = database.getConnection();
+	String reply=null; 
+	String querySetLimit = "SET GLOBAL max_allowed_packet=104857600;";  // 10 MB
+     Statement stSetLimit = conn.createStatement();
+     stSetLimit.execute(querySetLimit);
+     String way="http://127.0.0.1:8887/upload/";
+     String gdd = filepath.substring(filepath.lastIndexOf('/')+1);
+     String combine =way+gdd;
+     String sql = "UPDATE amazon SET user_photo =" +"'"+ combine + "'"+" WHERE user_name = " + "'"+und +"'"+";";
+     System.out.println(sql);
+     PreparedStatement statement = conn.prepareStatement(sql);
+    // statement.setString(1,"virat");
+    // statement.setString(1, fileName.toString());
+     //InputStream inputStream = new FileInputStream(new File(filepath));
+
+    // statement.setString(2, filepath);
+
+     int row = statement.executeUpdate();
+     if (row > 0) {
+         reply = "A contact was inserted with photo image.";
+        return reply;
+     }
+     conn.close();
+     //inputStream.close();
+	return reply;
+}
+
+
+
+
+
+
+
+
+
+public HashMap<String, String> displayPic(String username) throws Exception{
+	UserVO a = new UserVO();
+	 ArrayList<String> list=new ArrayList<String>();
+	 HashMap<String, String> hmap = new HashMap<String, String>();
+	DbConnection database= new DbConnection();
+	Connection conn = database.getConnection();
+	  System.out.println("Creating statement...");
+	  Statement stmt = null;
+	  String path="";
+      stmt = conn.createStatement();
+      String sql;
+      sql = "SELECT * FROM amazon where user_name = " + "'"+ username + "'"+";";
+     
+     // sql="SELECT * FROM amazon";
+      System.out.println(sql);
+      ResultSet rs = stmt.executeQuery(sql);
+
+      //STEP 5: Extract data from result set
+     
+      if(rs.next())
+		{
+    	    String a1=rs.getString("user_name");
+    	    String b=rs.getString("user_password");
+    	    String c=rs.getString("user_mobnumber");
+    	    String d=rs.getString("user_emailid");
+    	    String e=rs.getString("user_photo");
+    	  String e1 = e.substring(e.lastIndexOf('/')+1);
+    	  System.out.println(e1);
+    	    System.out.println(a1);
+    	    System.out.println(b);
+    	    System.out.println(c);
+    	    System.out.println(d);
+    	    System.out.println(e);
+			a.setUsername(a1);
+			a.setPassword(b);
+			
+			a.setMobNumber(c);
+			a.setEmailId(d);
+			a.setPicPath(e);
+			hmap.put("username", a1);
+			hmap.put("password", b);
+			hmap.put("mobnumber", c);
+			hmap.put("emailid", d);
+			hmap.put("picpath", e);
+			
+			
+			
+			return hmap;
+			
+		}
+   
+       //  System.out.print(" picpath : " + path);
+       
+      
+      //STEP 6: Clean-up environment
+      rs.close();
+      stmt.close();
+     // return a;
+	return hmap;
+}
+
+public Map<String, Object> displayHome() throws Exception{
+	UserVO a = new UserVO();
+	 ArrayList<String> list=new ArrayList<String>();
+	 HashMap<String, String> hmap = new HashMap<String, String>();
+	DbConnection database= new DbConnection();
+	Connection conn = database.getConnection();
+	  System.out.println("Creating statement...");
+	  Statement stmt = null;
+	  String path="";
+      stmt = conn.createStatement();
+      String sql;
+     // sql = "SELECT * FROM users where username = " + "'"+ username + "'"+";";
+     
+      sql="SELECT * FROM amazon";
+      System.out.println(sql);
+      ResultSet rs = stmt.executeQuery(sql);
+      Map<String, String> map = new HashMap<String, String>();
+      Map<String, Object> p = new HashMap<String, Object>();
+      //STEP 5: Extract data from result set
+      List<String> l = new ArrayList<String>();
+      List<String> l1 = new ArrayList<String>();
+      while(rs.next())
+		{
+    	  
+    	    String a1=rs.getString("user_name");
+    	    String b=rs.getString("user_password");
+    	    String c=rs.getString("user_mobnumber");
+    	    String d=rs.getString("user_emailid");
+    	    String e=rs.getString("user_photo");
+          
+    	     System.out.println("Hello");
+    	     
+    	     map.put(a1, e);
+			p.put("share", map);
+			
+		}
+	
+       //  System.out.print(" picpath : " + path);
+       
+    //  hmap.put("username","exit");
+      //STEP 6: Clean-up environment
+      rs.close();
+      stmt.close();
+     // return a;
+  	return p;
+}
+
+
+
+
+
+}
