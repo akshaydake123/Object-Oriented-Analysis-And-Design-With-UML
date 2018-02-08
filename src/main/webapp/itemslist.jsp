@@ -42,7 +42,7 @@ th, td {
   
 
    
-
+<!-- For loop to display image data into the jsp page -->
    <c:forEach var="entry" items="${it.share}">
     <tr><td align="center"><c:out value="${entry.key}"/></td> 
     <td align="center"><img src="${entry.value}" height="140" width="128"/> </td></tr> 
