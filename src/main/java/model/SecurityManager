@@ -103,7 +103,7 @@ public String uploadFile(String filepath,String fileName,String und) throws Exce
 
 
 
-
+// Display Image
 public HashMap<String, String> displayPic(String username) throws Exception{
 	UserVO a = new UserVO();
 	 ArrayList<String> list=new ArrayList<String>();
@@ -164,6 +164,8 @@ public HashMap<String, String> displayPic(String username) throws Exception{
      // return a;
 	return hmap;
 }
+
+//Display Image on Home Page
 
 public Map<String, Object> displayHome() throws Exception{
 	UserVO a = new UserVO();
