@@ -43,7 +43,7 @@ public class MyResource  {
 	  
 	public static String und="";
 	
-	//static String h ="benzos.byethost5.com/Demo/upload/";
+	// Image code
 	public static final String UPLOAD_FILE_SERVER = "C:/Demo/upload/";
 	@POST
 	@Path("/upload") 
@@ -74,6 +74,7 @@ public class MyResource  {
 		//return fileName+outputt;
 	}
 
+// Copy Image to a Folder
 private String writeToFileServer(InputStream inputStream, String fileName) throws IOException {
 	 
     OutputStream outputStream = null;
@@ -100,7 +101,7 @@ private String writeToFileServer(InputStream inputStream, String fileName) throw
     return qualifiedUploadFilePath;
 }
 
-
+// Login Code for perticular username
 @GET
 @Path("loginCheck/{username}")
 @Produces(MediaType.APPLICATION_JSON)
@@ -122,7 +123,7 @@ public  Viewable checkUserNameValidity(@PathParam("username") String n1)
 	
 }
 
-
+// Display home page
 @GET
 @Path("/displayHome")
 @Produces(MediaType.APPLICATION_JSON)
@@ -151,7 +152,7 @@ public  Viewable  displayHomePage()
 
 
 
-
+// Main Login with Email and Password
 	@POST
  @Path("/login")
 @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -227,6 +228,9 @@ public  Viewable  displayHomePage()
 		return Response.seeOther(uri).build();
 	}
 	*/
+	
+	
+// Add new User	
 @POST
 @Path("/addUser")
 @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
