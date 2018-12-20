@@ -10,3 +10,6 @@
 
 # Technology Used :	
 Jersey Restful Web services, JavaScript, jQuery, AJAX, MySQL, Twitter Bootstrap
+
+# Reference
+  http://www.iosrjournals.org/iosr-jmca/papers/Vol5-Issue2/C05022028.pdf
